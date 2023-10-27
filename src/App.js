@@ -19,11 +19,11 @@ function App() {
     };
   
     const body = JSON.stringify({
-      model: 'gpt-4',  // Assuming GPT-4 is named as 'gpt-4.0-turbo'
+      model: 'gpt-4',  
       messages: [
         {
           role: 'system',
-          content: 'You are an expert in Microsoft Excel and Google Sheets.'
+          content: 'You are a helpful assistant that provides detailed explanations and examples in a structured JSON format. and example of the format is as follows: Overview: explain whether you understood the request or if you need more info, Formula: Provide the formula only, explanation:provide an explanation of the formula, example:provide an example of the formula in action'
         },
         {
           role: 'user',
@@ -65,7 +65,6 @@ function copyToClipboard() {
   return (
     <div className="App">
       <select onChange={(e) => setService(e.target.value)}>
-        <option value="">Select Service</option>
         <option value="Google Sheets">Google Sheets</option>
         <option value="Microsoft Excel">Microsoft Excel</option>
       </select>
