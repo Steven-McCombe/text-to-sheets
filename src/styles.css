@@ -1,0 +1,92 @@
+/* src/styles.css */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .App {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 80%;
+    max-width: 600px;
+  }
+  
+  select, textarea, button {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+  }
+  
+  button {
+    background-color: #008CBA;
+    color: white;
+    cursor: pointer;
+    border: none;
+  }
+  
+  button:hover {
+    background-color: #005f5f;
+  }
+  
+  .result {
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 4px;
+  }
+  
+  .result h2 {
+    margin-top: 0;
+  }
+  
+  .result p {
+    margin-bottom: 10px;
+  }
+  
+  .result pre {
+    background-color: #e0e0e0;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  .formula {
+    font-size: 18px;
+  }
+  
+  /* Add these styles to your CSS file */
+
+/* Add these styles to your styles.css */
+
+.codeContainer {
+  position: relative;
+  border: 1px solid #ddd; /* Optional: for border */
+  margin-bottom: 1rem; /* Space below the container */
+  background-color: #f9f9f9; /* Light grey background */
+}
+
+.codeBlock {
+  font-family: monospace;
+  padding: 1rem;
+  margin: 0; /* Override default margin of pre tag */
+}
+
+.copyIcon {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  cursor: pointer;
+  font-size: 1.5rem; /* Make the icon a bit larger */
+  color: #555; /* Make icon color darker */
+}
