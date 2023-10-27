@@ -1,28 +1,59 @@
 // src/App.js
 import React, { useState } from 'react';
 
+const apiKey = process.env.REACT_APP_OPENAPI_KEY;
+
+
 function App() {
   const [service, setService] = useState('');
   const [description, setDescription] = useState('');
   const [result, setResult] = useState('');
 
 
-async function handleSubmit() {
-  const openai = require('openai');
-  const api = new openai.API({ key: process.env.REACT_APP_OPENAPI_KEY, engine: 'davinci' });
-
-  try {
-    const response = await api.createCompletion({
-      prompt: `Service: ${service}\nDescription: ${description}`,
+  async function handleSubmit() {
+    const url = 'https://api.openai.com/v1/chat/completions';
+  
+    const headers = {
+      'Authorization': `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    };
+  
+    const body = JSON.stringify({
+      model: 'gpt-4',  // Assuming GPT-4 is named as 'gpt-4.0-turbo'
+      messages: [
+        {
+          role: 'system',
+          content: 'You are an expert in Microsoft Excel and Google Sheets.'
+        },
+        {
+          role: 'user',
+          content: `Service: ${service}\nDescription: ${description}`
+        }
+      ],
       temperature: 0.7,
       max_tokens: 150,
     });
-    const result = response.choices[0].text.trim();
-    setResult(result);
-  } catch (error) {
-    console.error('Error:', error);
+  
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: body,
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      const result = data.choices[0].message.content.trim();
+      setResult(result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   }
-}
+  
+  
 
 
 function copyToClipboard() {
