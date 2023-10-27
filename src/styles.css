@@ -67,19 +67,16 @@ body {
   
   /* Add these styles to your CSS file */
 
-/* Add these styles to your styles.css */
-
 .codeContainer {
   position: relative;
   border: 1px solid #ddd; /* Optional: for border */
   margin-bottom: 1rem; /* Space below the container */
-  background-color: #f9f9f9; /* Light grey background */
 }
 
 .codeBlock {
   font-family: monospace;
   padding: 1rem;
-  margin: 0; /* Override default margin of pre tag */
+  background-color: #f9f9f9; /* Light grey background */
 }
 
 .copyIcon {
@@ -87,6 +84,4 @@ body {
   top: 0.5rem;
   right: 0.5rem;
   cursor: pointer;
-  font-size: 1.5rem; /* Make the icon a bit larger */
-  color: #555; /* Make icon color darker */
 }

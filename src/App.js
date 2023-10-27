@@ -62,7 +62,7 @@ function App() {
       messages: [
         {
           role: 'system',
-          content: 'You are a helpful assistant that provides explanations and examples in a structured JSON format. and example of the format is as follows: Overview: explain whether you understood the request or if you need more info, Formula: Provide the formula only, explanation:provide an explanation of the formula. The json should follow this strict format. Do not include any other objects in the json.'
+          content: 'You are a helpful assistant that provides explanations and examples in a structured JSON format. and example of the format is as follows: Overview: explain whether you understood the request or if you need more info, Formula: Provide the formula only, explanation:provide an explanation of the formula, example: provide a consise example. The json should follow this strict format. Do not include any other objects in the json.'
         },
         {
           role: 'user',
@@ -103,7 +103,41 @@ function App() {
     console.error('Failed to parse JSON:', e);
     isError = true;
   }
-
+  const renderJSON = (obj) => {
+    return Object.keys(obj).map((key, index) => {
+      if (key === "Formula") {
+        // Special rendering for Formula
+        return (
+          <div key={index}>
+            <Typography variant="h6">{key}</Typography>
+            <div className="codeContainer">
+          <pre className="codeBlock">{parsedResult.Formula}</pre>
+          <FileCopyOutlinedIcon
+            className="copyIcon"
+            onClick={() => navigator.clipboard.writeText(parsedResult.Formula)}
+          />
+        </div>
+          </div>
+        );
+      }
+      if (typeof obj[key] === 'object') {
+        // Recurse if the value is another object
+        return (
+          <div key={index}>
+            <Typography variant="h6">{key}</Typography>
+            {renderJSON(obj[key])}
+          </div>
+        );
+      }
+      return (
+        <div key={index}>
+          <Typography variant="h6">{key}</Typography>
+          <Typography paragraph>{obj[key]}</Typography>
+        </div>
+      );
+    });
+  };
+  
 
 
   return (
@@ -143,34 +177,12 @@ function App() {
       </Button>
       {isLoading && <CircularProgress color="success" />}  {/* Render loading text when isLoading is true */}
       <Paper className={classes.result} elevation={3}>
-        {parsedResult ? (
-          <>
-            <Typography variant="h6">Overview</Typography>
-            <Typography paragraph>{parsedResult.Overview}</Typography>
-
-            <Typography variant="h6">Formula</Typography>
-        <div className="codeContainer">
-          <FileCopyOutlinedIcon
-            className="copyIcon"
-            onClick={() => navigator.clipboard.writeText(parsedResult.Formula)}
-          />
-          <pre className="codeBlock">{parsedResult.Formula}</pre>
-        </div>
-
-            <Typography variant="h6">Explanation</Typography>
-            <Typography paragraph>{parsedResult.Explanation}</Typography>
-            <Button
-              variant="outlined"
-              className={classes.button}
-              onClick={() => navigator.clipboard.writeText(parsedResult.Formula)}
-            >
-              Copy Formula to Clipboard
-            </Button>
-          </>
-        ) : (
-          isError && <Typography color="error">{result}</Typography>
-        )}
-      </Paper>
+      {parsedResult ? (
+        renderJSON(parsedResult)
+      ) : (
+        isError && <Typography color="error">{result}</Typography>
+      )}
+    </Paper>
     </Container>
   );
 }
