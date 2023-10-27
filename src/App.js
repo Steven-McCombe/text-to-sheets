@@ -23,15 +23,15 @@ function App() {
       messages: [
         {
           role: 'system',
-          content: 'You are a helpful assistant that provides detailed explanations and examples in a structured JSON format. and example of the format is as follows: Overview: explain whether you understood the request or if you need more info, Formula: Provide the formula only, explanation:provide an explanation of the formula, example:provide an example of the formula in action'
+          content: 'You are a helpful assistant that provides explanations and examples in a structured JSON format. and example of the format is as follows: Overview: explain whether you understood the request or if you need more info, Formula: Provide the formula only, explanation:provide an explanation of the formula. The json should follow this strict format. Do not include any other objects in the json.'
         },
         {
           role: 'user',
-          content: `Service: ${service}\nDescription: ${description}`
+          content: `Service: ${service}\nDescription, generate a formula that: ${description}`
         }
       ],
       temperature: 0.7,
-      max_tokens: 150,
+      max_tokens: 2000,
     });
   
     try {
@@ -54,11 +54,12 @@ function App() {
   }
   
   
-
-
-function copyToClipboard() {
-  navigator.clipboard.writeText(result);
-}
+  let parsedResult = null;
+  try {
+    parsedResult = JSON.parse(result);
+  } catch (e) {
+    console.error('Failed to parse JSON:', e);
+  }
 
 
 
@@ -74,13 +75,25 @@ function copyToClipboard() {
       ></textarea>
       <button onClick={handleSubmit}>Submit</button>
       <div className="result">
-        {result}
-        {result && (
-          <button onClick={copyToClipboard}>Copy to Clipboard</button>
+        {parsedResult && (
+          <>
+            <h2>Overview</h2>
+            <p>{parsedResult.Overview}</p>
+
+            <h2>Formula</h2>
+            <pre className="formula">{parsedResult.Formula}</pre>
+
+            <h2>Explanation</h2>
+            <p>{parsedResult.Explanation}</p>
+            <button onClick={() => navigator.clipboard.writeText(parsedResult.Formula)}>
+              Copy Formula to Clipboard
+            </button>
+          </>
         )}
       </div>
     </div>
   );
 }
+
 
 export default App;
