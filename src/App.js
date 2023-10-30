@@ -3,10 +3,6 @@ import React, { useState } from 'react';
 import './styles.css'; 
 import { 
   Container, 
-  Select, 
-  MenuItem, 
-  FormControl, 
-  InputLabel, 
   TextField, 
   Button, 
   Paper, 
@@ -15,13 +11,21 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
-
+import ButtonGroup from '@material-ui/core/ButtonGroup'
 
 const apiKey = process.env.REACT_APP_OPENAPI_KEY;
 
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: theme.spacing(4),
+  },
+  buttonGroup: {
+    margin: theme.spacing(1),
+  },
+  serviceButton: {
+    minWidth: '130px',  
+    padding: '8px 16px', 
+
   },
   formControl: {
     margin: theme.spacing(1),
@@ -42,11 +46,15 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
-  const [service, setService] = useState('');
+  const [service, setService] = useState('Microsoft Excel'); 
   const [description, setDescription] = useState('');
   const [result, setResult] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  // Handler for button click
+  const handleServiceChange = (service) => {
+    setService(service);
+  };
 
   async function handleSubmit() {
     setIsLoading(true);
@@ -97,12 +105,15 @@ function App() {
   
   let parsedResult = null;
   let isError = false;
-  try {
-    parsedResult = JSON.parse(result);
-  } catch (e) {
-    console.error('Failed to parse JSON:', e);
-    isError = true;
+  if (result) {  
+    try {
+      parsedResult = JSON.parse(result);
+    } catch (e) {
+      console.error('Failed to parse JSON:', e);
+      isError = true;
+    }
   }
+
   const renderJSON = (obj) => {
     return Object.keys(obj).map((key, index) => {
       if (key === "Formula") {
@@ -143,27 +154,32 @@ function App() {
   return (
     <Container className={classes.root}>
       <Typography variant="h4" gutterBottom>Formula Generator</Typography>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="service-label">Service</InputLabel>
-        <Select
-          labelId="service-label"
-          value={service}
-          onChange={(e) => setService(e.target.value)}
-          label="Service"
+      <ButtonGroup 
+        color="primary" 
+        aria-label="outlined primary button group" 
+        className={classes.buttonGroup}  // Apply the class to the ButtonGroup
+      >
+        <Button 
+          variant={service === 'Microsoft Excel' ? "contained" : "outlined"} 
+          onClick={() => handleServiceChange('Microsoft Excel')}
+          className={classes.serviceButton}  // Apply the class to each Button
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="Google Sheets">Google Sheets</MenuItem>
-          <MenuItem value="Microsoft Excel">Microsoft Excel</MenuItem>
-        </Select>
-      </FormControl>
+          Excel
+        </Button>
+        <Button 
+          variant={service === 'Google Sheets' ? "contained" : "outlined"} 
+          onClick={() => handleServiceChange('Google Sheets')}
+          className={classes.serviceButton}  // Apply the class to each Button
+        >
+          Google Sheets
+        </Button>
+        </ButtonGroup>
       <TextField
         variant="outlined"
         margin="normal"
         fullWidth
         multiline
-        rows={4}
+        minRows={4}
         label="Describe your problem or formula here..."
         onChange={(e) => setDescription(e.target.value)}
       />
