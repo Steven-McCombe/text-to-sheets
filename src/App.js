@@ -152,7 +152,7 @@ function App() {
 
 
   return (
-    <Container className={classes.root}>
+    <Container className={`${classes.root} container`}>
       <Typography variant="h4" gutterBottom>Formula Generator</Typography>
       <ButtonGroup 
         color="primary" 
